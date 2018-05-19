@@ -18,7 +18,7 @@ git clone https://github.com/david3107/squatm3.git
 
 ## Recommended Python Version:
 
-Sublist3r currently supports only **Python 3** 
+Squatm3 currently supports only **Python 3** 
 
 
 ## Dependencies:
