@@ -58,8 +58,7 @@ optional arguments:
 
 ## License
 
-Sublist3r is licensed under the GNU GPL license. take a look at the [LICENSE](https://github.com/aboul3la/Sublist3r/blob/master/LICENSE) for more information.
-
+Squatm3 is licensed under the GNU GPL license.
 
 
 ## Version
