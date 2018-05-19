@@ -29,7 +29,7 @@ These dependencies can be installed using the requirements file:
 
 - Installation on Windows:
 ```
-c:\python3\python.exe -m pip install -r requirements.txt
+c:\python33\python.exe -m pip install -r requirements.txt
 ```
 - Installation on Linux
 ```
