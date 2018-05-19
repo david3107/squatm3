@@ -1,0 +1,10 @@
+{
+
+    "key": "",
+    "secret": "",
+    "urls": [
+        "/v1/domains/tlds",
+        "/v1/domains/available"
+        ]
+
+}
