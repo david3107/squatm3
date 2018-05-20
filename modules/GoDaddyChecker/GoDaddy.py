@@ -49,5 +49,4 @@ class GoDaddy:
         cookie = {'currency': 'EUR'}
 
         response = requests.get(url,headers=headers, cookies=cookie)
-
         return response.content
