@@ -60,7 +60,7 @@ optional arguments:
 
 Squatm3 is licensed under the GNU GPL license.
 
-##Troubleshooting
+## Troubleshooting
 
 If after the usage of the tool you do not get any results, it is possible that GoDaddy limited your IP. Workaround:
 
