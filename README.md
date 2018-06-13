@@ -36,7 +36,7 @@ c:\python33\python.exe -m pip install -r requirements.txt
 sudo pip install -r requirements.txt
 ```
 
-##Usage
+## Usage
 ```
 usage: squatme.py [-h] [--url URL] [--tld [TLD]] [-A [ALL]] [-hg [HOMOGLYPH]]
                   [-F [FLIPPER]] [-R [REMOVE]] [--available [AVAILABLE]]
