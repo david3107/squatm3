@@ -41,7 +41,6 @@ sudo pip install -r requirements.txt
 usage: squatme.py [-h] [--url URL] [--tld [TLD]] [-A [ALL]] [-hg [HOMOGLYPH]]
                   [-F [FLIPPER]] [-R [REMOVE]] [--available [AVAILABLE]]
 
-SquatMe v1.0 - Copyright @wh1teInk
 
 optional arguments:
   -h, --help            show this help message and exit
