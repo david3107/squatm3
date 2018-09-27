@@ -79,6 +79,10 @@ def prepare_list_domains_based_on_input():
         step3 = Flipper(url)
         domains = domains + step3.flip_letters()
 
+    if len(domains) == 0:
+        print("Exit: No domains have been generated!!")
+        exit(1)
+        
     return domains
 
 
@@ -135,10 +139,6 @@ def main():
     prepare_arguments()
     check_required_params()
     domains = prepare_list_domains_based_on_input()
-
-    if len(domains) == 0:
-        print("Exit: No domains have been generated!!")
-        return
     check_domain_availability(domains)
 
 
