@@ -26,7 +26,7 @@ def signal_handler(sig, frame):
 def prepare_arguments():
     global args, url, tld, available, homoglyph_fast,homoglyph_complete,enable_godaddy, flipper, remove, all_args
 
-    parser = argparse.ArgumentParser(description='SquatMe v1.0 - Copyright @david3107')
+    parser = argparse.ArgumentParser(description='SquatMe v1.0 -  @davide107')
     parser.add_argument('--url', dest='url', help='url to be squatted')
     parser.add_argument('--tld', dest='tld', type=bool, nargs='?',
                         const=True, default=True,
@@ -51,7 +51,7 @@ def prepare_arguments():
     #                    const=True, default="text", choices=['text', 'json'], help='Format of the output of the tool')
     parser.add_argument('--only-available', dest='available', type=bool, nargs='?',
                         const=True, default=False,
-                        help='lists only the available domains')
+                        help='lists only the available domains for purchase')
     args = parser.parse_args()
     url = args.url
     tld = args.tld
@@ -96,7 +96,7 @@ def prepare_list_domains_based_on_input():
         domains = domains + step3.flip_letters()
 
     if len(domains) == 0:
-        print("Exit: No domains have been generated!!")
+        print("Exit: No domains have been generated!! Did you specify the attack(s)?")
         exit(1)
         
     return domains
