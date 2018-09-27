@@ -1,5 +1,7 @@
 ## About Squatm3 
 
+![Squatme](http://pixelartmaker.com/art/7d89078b16bb7d7.png)
+
 Squatm3 is a python tool designed to enumerate available domains generated modifying the original domain name through different techniques:
 
 -	Substitution attacks
