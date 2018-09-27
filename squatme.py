@@ -79,7 +79,7 @@ def main():
             step3 = Flipper(url)
             domains = domains + step3.flip_letters()
 
-        if len(domains) > 0:
+        if len(domains) == 0:
             print("Exit: No domains have been generated!!")
             exit(1)
 
