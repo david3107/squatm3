@@ -23,7 +23,7 @@ Squatm3 currently supports only **Python 3**
 
 ## Dependencies:
 
-Squatm3 depends on the `tld` , `validators` and the `decorator-4.1.2` python modules.
+Squatm3 depends on the `tld` , `validators` and the `decorator>=4.1.2` python modules.
 
 These dependencies can be installed using the requirements file:
 
@@ -33,14 +33,25 @@ c:\python33\python.exe -m pip install -r requirements.txt
 ```
 - Installation on Linux
 ```
-sudo pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Usage
 ```
-usage: squatme.py [-h] [--url URL] [--tld [TLD]] [-A [ALL]] [-hg [HOMOGLYPH]]
-                  [-F [FLIPPER]] [-R [REMOVE]] [--available [AVAILABLE]]
 
+ ___             __    _           ____
+/ __> ___  _ _  /. | _| |_ ._ _ _ <__ /
+\__ \/ . || | |/_  .| | |  | ' ' | <_ \
+<___/\_  |`___|  |_|  |_|  |_|_|_|<___/
+       | |
+
+
+usage: squatme.py [-h] [--url URL] [--tld [TLD]] [-A [ALL]]
+                  [-Hf [HOMOGLYPH_FAST]] [-Hc [HOMOGLYPH_COMPLETE]]
+                  [-F [FLIPPER]] [-R [REMOVE]] [--godaddy [ENABLE_GODADDY]]
+                  [--only-available [AVAILABLE]]
+
+SquatMe v1.0 - @davide107
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -48,11 +59,18 @@ optional arguments:
   --tld [TLD]           read the tld list form file db/top_domains and
                         generate the domains. If not specified uses only .com
   -A [ALL]              execute all the squatting attacks
-  -hg [HOMOGLYPH]       execute homoglyph attack
+  -Hf [HOMOGLYPH_FAST]  execute a fast homoglyph attack, mutating only one
+                        letter at the time
+  -Hc [HOMOGLYPH_COMPLETE]
+                        execute a complete homoglyph attack,generating all the
+                        possible combinations (slow)
   -F [FLIPPER]          execute flipping attack
   -R [REMOVE]           remove one letter a time
-  --available [AVAILABLE]
-                        lists only the available domains
+  --godaddy [ENABLE_GODADDY]
+                        checks on godaddy if the domain is available for sale
+                        together with the price
+  --only-available [AVAILABLE]
+                        lists only the available domains for purchase
 ```
 
 ## License
@@ -64,7 +82,7 @@ Squatm3 is licensed under the GNU GPL license.
 If after the usage of the tool you do not get any results, it is possible that GoDaddy limited your IP. Workaround:
 
 -	use VPN
-- 	wait till your IP is allowed again
+- wait till your IP is allowed again
 
 ## Version
-**Current version is 1.0**
+** Current version is 1.1 **
