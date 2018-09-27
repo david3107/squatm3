@@ -57,66 +57,68 @@ def main():
         print("--url field is mandatory")
         return
 
-    if checkvalidity.check_valid_url(url):
-        print("URL " + url + " is valid: let's squat\n")
-
-        '''
-        create the list of domains based on the attacks that were selected
-        '''
-        if remove or all:
-            print("\n\x1b[6;30;42m" + "[*]Letter removal" + '\x1b[0m')
-            step1 = RemoveOneLetter(url)
-            domains = step1.remove_letters()
-
-        if homoglyph or all:
-            print("\x1b[6;30;42m[*] Homoglyph attack" + '\x1b[0m')
-            step2 = HomoglyphAttack(url)
-            step2.load_letters()
-            domains = domains + step2.switch_letters()
-
-        if flipper or all:
-            print("\x1b[6;30;42m[*] Flipper attack" + '\x1b[0m')
-            step3 = Flipper(url)
-            domains = domains + step3.flip_letters()
-
-        if len(domains) == 0:
-            print("Exit: No domains have been generated!!")
-            exit(1)
-
-        if tld is False:
-            tlds = ['com']
-        else:
-            tld_list = TldSelector(url)
-            tlds = tld_list.generate_domains_from_top_tld
-
-        godaddy = GoDaddy.GoDaddy()
-        combined_domain_list = []
-
-        for tld in tlds:
-            try:
-                for domain in domains:
-                    complete_domain = domain + '.' + tld
-                    response = godaddy.check_available_domain_get(complete_domain)
-                    if len(response) > 0:
-                        response = json.loads(response)
-                        if available:
-                            if response['ExactMatchDomain']['IsPurchasable']:
-                                print('Domain ' + response['ExactMatchDomain']['Fqdn'] + ' is available: ' + str(
-                                    response['ExactMatchDomain']['IsPurchasable']) + " - Price: " + str(response['Products'][0]['PriceInfo']['CurrentPrice']) + u"\xA3")
-
-                        else:
-                            print('Domain ' + response['ExactMatchDomain']['Fqdn'] + ' is available: ' + str(
-                                response['ExactMatchDomain']['IsPurchasable']))
-
-                    else:
-                        print('Domain ' + urllib.parse.unquote(complete_domain) + ' : No info retrieved, try manually ')
-                    combined_domain_list.append(complete_domain)
-            except Exception as e:
-                print(e)
-                pass
-    else:
+    if not checkvalidity.check_valid_url(url):
         print("URL not valid. Exiting ...")
         return
+
+    
+    print("URL " + url + " is valid: let's squat\n")
+
+    '''
+    create the list of domains based on the attacks that were selected
+    '''
+    if remove or all:
+        print("\n\x1b[6;30;42m" + "[*]Letter removal" + '\x1b[0m')
+        step1 = RemoveOneLetter(url)
+        domains = step1.remove_letters()
+
+    if homoglyph or all:
+        print("\x1b[6;30;42m[*] Homoglyph attack" + '\x1b[0m')
+        step2 = HomoglyphAttack(url)
+        step2.load_letters()
+        domains = domains + step2.switch_letters()
+
+    if flipper or all:
+        print("\x1b[6;30;42m[*] Flipper attack" + '\x1b[0m')
+        step3 = Flipper(url)
+        domains = domains + step3.flip_letters()
+
+    if len(domains) == 0:
+        print("Exit: No domains have been generated!!")
+        return
+
+    if tld is False:
+        tlds = ['com']
+    else:
+        tld_list = TldSelector(url)
+        tlds = tld_list.generate_domains_from_top_tld
+
+    godaddy = GoDaddy.GoDaddy()
+    combined_domain_list = []
+
+    for tld in tlds:
+        try:
+            for domain in domains:
+                complete_domain = domain + '.' + tld
+                response = godaddy.check_available_domain_get(complete_domain)
+                if len(response) > 0:
+                    response = json.loads(response)
+                    if available:
+                        if response['ExactMatchDomain']['IsPurchasable']:
+                            print('Domain ' + response['ExactMatchDomain']['Fqdn'] + ' is available: ' + str(
+                                response['ExactMatchDomain']['IsPurchasable']) + " - Price: " + str(response['Products'][0]['PriceInfo']['CurrentPrice']) + u"\xA3")
+
+                    else:
+                        print('Domain ' + response['ExactMatchDomain']['Fqdn'] + ' is available: ' + str(
+                            response['ExactMatchDomain']['IsPurchasable']))
+
+                else:
+                    print('Domain ' + urllib.parse.unquote(complete_domain) + ' : No info retrieved, try manually ')
+                combined_domain_list.append(complete_domain)
+        except Exception as e:
+            print(e)
+            pass
+    
 
 
 if __name__ == "__main__":
