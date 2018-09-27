@@ -2,6 +2,7 @@
 from tld import get_tld
 import codecs
 import urllib.parse
+import itertools
 
 
 
@@ -20,7 +21,9 @@ class HomoglyphAttack:
                 key_value = line.split('\n')[0].split(',')
                 self.dictionary[key_value[0]] = key_value[1].split(' ')
 
+    
     def switch_letters(self):
+        
         '''
         The following function switches every single letter with a homoglyph
 
@@ -84,32 +87,35 @@ class HomoglyphAttack:
         except Exception as e:
 
             pass
+
         return domains
 
     def switch_all_letters(self):
         """
-        The following function switches every single letter with a homoglyph
+        The following function generates all the possible combinations using homoglyphs
 
         """
-
+        domains = []
         url = get_tld(self.url, as_object=True, fix_protocol=True)
         domain = url.domain
-        n = 0
-        m = len(domain)
-        domains = []
-        letter_dict = {}
-        j = 0
-        try:
-            # Go through the domain chars
-            while n < m:
-                letter_dict[n] = self.dictionary[domain[n]]
-                # go through the homoglyph that matches the letter of the domain in position n and load them
+        a = []
+        for letter in domain:
+            self.dictionary[letter].extend(letter)
+            a.append(self.dictionary[letter])
 
-                j = j + 1
-                n = n + 1
-        except:
-            pass
+        b = itertools.product(*a)
+
+        for i in b:
+            domains.append(urllib.parse.quote(''.join(i).encode('utf-8')))
+
+        return domains
 
 
-            # TODO: Iterate through all the letters and combine homoglyphs
-        print(letter_dict)
+
+
+
+
+
+
+
+
