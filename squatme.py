@@ -32,6 +32,10 @@ def main():
                         const=True, default=False, help='execute flipping attack ')
     parser.add_argument('-R', dest='remove', type=bool, nargs='?',
                         const=True, default=False, help='remove one letter a time')
+    #parser.add_argument('--output', dest='output', type=string, nargs='?',
+    #                    const=True, default="stdout", choices=['stdout', 'file'], help='Output of the tool: stdout or file')
+    #parser.add_argument('--output-format', dest='output_format', type=string, nargs='?',
+    #                    const=True, default="text", choices=['text', 'json'], help='Format of the output of the tool')
     parser.add_argument('--available', dest='available', type=bool, nargs='?',
                         const=True, default=False,
                         help='lists only the available domains')
@@ -43,6 +47,8 @@ def main():
     homoglyph = args.homoglyph
     flipper = args.flipper
     remove = args.remove
+    #output = args.output
+    #output_format = args.output_format
     all = args.all
     domains = []
 
@@ -54,6 +60,9 @@ def main():
     if checkvalidity.check_valid_url(url):
         print("URL " + url + " is valid: let's squat\n")
 
+        '''
+        create the list of domains based on the attacks that were selected
+        '''
         if remove or all:
             print("\n\x1b[6;30;42m" + "[*]Letter removal" + '\x1b[0m')
             step1 = RemoveOneLetter(url)
@@ -70,18 +79,17 @@ def main():
             step3 = Flipper(url)
             domains = domains + step3.flip_letters()
 
-        if len(domains) == 0:
+        if len(domains) > 0:
             print("Exit: No domains have been generated!!")
+            exit(1)
 
         if tld is False:
             tlds = ['com']
-
         else:
             tld_list = TldSelector(url)
             tlds = tld_list.generate_domains_from_top_tld
 
         godaddy = GoDaddy.GoDaddy()
-
         combined_domain_list = []
 
         for tld in tlds:
