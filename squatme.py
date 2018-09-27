@@ -134,7 +134,6 @@ def check_domain_availability(domains):
 
 
 def main():
-    domains = []
     banner()
     prepare_arguments()
     check_required_params()
