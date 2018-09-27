@@ -4,7 +4,8 @@ Squatm3 is a python tool designed to enumerate available domains generated modif
 
 -	Substitution attacks
 -	Flipping attack
-- 	Homoglyph attack
+- 	Homoglyph attack fast (execute a fast homoglyph attack, mutating only one letter at the time )
+-   Homoglyph attack complete (generates all the possible combinations)
 
 Squatm3 will help penetration testers to identify domains to be used in phishing attack simulations and security analysts to prevent effective phishing attacks
 
@@ -51,7 +52,7 @@ usage: squatme.py [-h] [--url URL] [--tld [TLD]] [-A [ALL]]
                   [-F [FLIPPER]] [-R [REMOVE]] [--godaddy [ENABLE_GODADDY]]
                   [--only-available [AVAILABLE]]
 
-SquatMe v1.0 - @davide107
+SquatMe v1.1 - @davide107
 
 optional arguments:
   -h, --help            show this help message and exit
