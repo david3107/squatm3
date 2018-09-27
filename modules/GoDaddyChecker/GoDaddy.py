@@ -50,3 +50,4 @@ class GoDaddy:
 
         response = requests.get(url,headers=headers, cookies=cookie)
         return response.content
+

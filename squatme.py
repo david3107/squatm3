@@ -8,8 +8,9 @@ from modules.Substitutions.Flipper import Flipper
 from modules.Tldmodule.TldSelector import TldSelector
 from modules.Urlchecker import checkvalidity
 
+
 def banner():
-        print("""
+    print("""
  ___             __    _           ____
 / __> ___  _ _  /. | _| |_ ._ _ _ <__ /
 \__ \/ . || | |/_  .| | |  | ' ' | <_ \\
@@ -17,12 +18,14 @@ def banner():
        | |
 \n""")
 
+
 def signal_handler(sig, frame):
-        sys.exit(0)
+    sys.exit(0)
+
 
 def prepare_arguments():
     global args, url, tld, available, homoglyph, flipper, remove, all_args
-    
+
     parser = argparse.ArgumentParser(description='SquatMe v1.0 - Copyright @david3107')
     parser.add_argument('--url', dest='url', help='url to be squatted')
     parser.add_argument('--tld', dest='tld', type=bool, nargs='?',
@@ -36,9 +39,9 @@ def prepare_arguments():
                         const=True, default=False, help='execute flipping attack ')
     parser.add_argument('-R', dest='remove', type=bool, nargs='?',
                         const=True, default=False, help='remove one letter a time')
-    #parser.add_argument('--output', dest='output', type=string, nargs='?',
+    # parser.add_argument('--output', dest='output', type=string, nargs='?',
     #                    const=True, default="stdout", choices=['stdout', 'file'], help='Output of the tool: stdout or file')
-    #parser.add_argument('--output-format', dest='output_format', type=string, nargs='?',
+    # parser.add_argument('--output-format', dest='output_format', type=string, nargs='?',
     #                    const=True, default="text", choices=['text', 'json'], help='Format of the output of the tool')
     parser.add_argument('--available', dest='available', type=bool, nargs='?',
                         const=True, default=False,
@@ -50,9 +53,10 @@ def prepare_arguments():
     homoglyph = args.homoglyph
     flipper = args.flipper
     remove = args.remove
-    #output = args.output
-    #output_format = args.output_format
+    # output = args.output
+    # output_format = args.output_format
     all_args = args.all
+
 
 def prepare_list_domains_based_on_input():
     '''
@@ -88,6 +92,7 @@ def check_required_params():
         print("URL not valid. Exiting ...")
         exit(0)
 
+
 def check_domain_availability(domains):
     global tld, url
     if tld is False:
@@ -109,7 +114,8 @@ def check_domain_availability(domains):
                     if available:
                         if response['ExactMatchDomain']['IsPurchasable']:
                             print('Domain ' + response['ExactMatchDomain']['Fqdn'] + ' is available: ' + str(
-                                response['ExactMatchDomain']['IsPurchasable']) + " - Price: " + str(response['Products'][0]['PriceInfo']['CurrentPrice']) + u"\xA3")
+                                response['ExactMatchDomain']['IsPurchasable']) + " - Price: " + str(
+                                response['Products'][0]['PriceInfo']['CurrentPrice']) + u"\xA3")
 
                     else:
                         print('Domain ' + response['ExactMatchDomain']['Fqdn'] + ' is available: ' + str(
@@ -119,9 +125,8 @@ def check_domain_availability(domains):
                     print('Domain ' + urllib.parse.unquote(complete_domain) + ' : No info retrieved, try manually ')
                 combined_domain_list.append(complete_domain)
         except Exception as e:
-            print(str(e) + str("####")) 
+            print(str(e) + str("####"))
             pass
-
 
 
 def main():
@@ -135,7 +140,6 @@ def main():
         print("Exit: No domains have been generated!!")
         return
     check_domain_availability(domains)
-    
 
 
 if __name__ == "__main__":
