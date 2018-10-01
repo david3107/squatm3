@@ -12,7 +12,7 @@ from modules.Classes import Domain
 
 
 def banner():
-    print_out("""
+    print("""
  ___             __    _           ____
 / __> ___  _ _  /. | _| |_ ._ _ _ <__ /
 \__ \/ . || | |/_  .| | |  | ' ' | <_ \\

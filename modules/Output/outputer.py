@@ -10,5 +10,5 @@ def print_json_to_console(messages, domains):
 	data['messages'] = messages
 	data['domains'] = []
 	for d in domains:
-		data['domains'].append(urllib.parse.unquote(d.toJSON())) 
+		data['domains'].append(d.toJSON())
 	print(json.dumps(data)) 

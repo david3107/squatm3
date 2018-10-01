@@ -7,4 +7,4 @@ class Domain:
 		self.no_info = False
 
 	def toJSON(self):
-		return json.dumps(self, default=lambda o: o.__dict__)
+		return json.dumps(self, default=lambda o: o.__dict__, ensure_ascii=False)
