@@ -7,10 +7,12 @@ from modules.Substitutions.HomoglyphAttack import HomoglyphAttack
 from modules.Substitutions.Flipper import Flipper
 from modules.Tldmodule.TldSelector import TldSelector
 from modules.Urlchecker import checkvalidity
+from modules.Output import outputer
+from modules.Classes import Domain
 
 
 def banner():
-    print("""
+    print_out("""
  ___             __    _           ____
 / __> ___  _ _  /. | _| |_ ._ _ _ <__ /
 \__ \/ . || | |/_  .| | |  | ' ' | <_ \\
@@ -24,7 +26,7 @@ def signal_handler(sig, frame):
 
 
 def prepare_arguments():
-    global args, url, tld, available, homoglyph_fast,homoglyph_complete,enable_godaddy, flipper, remove, all_args
+    global args, url, tld, available, homoglyph_fast,homoglyph_complete,enable_godaddy, flipper, remove, all_args, output, output_format
 
     parser = argparse.ArgumentParser(description='SquatMe v1.1 -  @davide107')
     parser.add_argument('--url', dest='url', help='url to be squatted')
@@ -44,11 +46,9 @@ def prepare_arguments():
                         const=True, default=False, help='remove one letter a time')
     parser.add_argument('--godaddy', dest='enable_godaddy', type=bool, nargs='?',
                         const=True, default=False, help='checks on godaddy if the domain is available for sale together with the price')
-
-    # parser.add_argument('--output', dest='output', type=string, nargs='?',
-    #                    const=True, default="stdout", choices=['stdout', 'file'], help='Output of the tool: stdout or file')
-    # parser.add_argument('--output-format', dest='output_format', type=string, nargs='?',
-    #                    const=True, default="text", choices=['text', 'json'], help='Format of the output of the tool')
+    parser.add_argument('--output', dest='output', type=str, nargs='?',
+                        const=True, default="text", choices=['text', 'json'], 
+                        help='Output of the tool: text (stdout), csv(file) or json(file)')
     parser.add_argument('--only-available', dest='available', type=bool, nargs='?',
                         const=True, default=False,
                         help='lists only the available domains for purchase')
@@ -61,9 +61,36 @@ def prepare_arguments():
     enable_godaddy = args.enable_godaddy
     flipper = args.flipper
     remove = args.remove
-    # output = args.output
-    # output_format = args.output_format
+    output = args.output
     all_args = args.all
+
+def print_out(msg):
+    global output, out_messages, out_domains
+    color = '\x1b[6;30;42m'
+    color_end = '\x1b[0m'
+    if output == 'text':
+        if isinstance(msg, Domain.Domain):
+            if msg.no_info:
+                outputer.print_text_to_console(msg.fqdn + " - No info retrieved, try manually")
+            else:
+                outputer.print_text_to_console(msg.fqdn + " is available: " + msg.purchasable + " - Price: " + msg.price)
+        elif isinstance(msg, list):
+            for d in msg:
+                outputer.print_text_to_console(d.fqdn + " - No info retrieved, try manually")   
+        else:
+            outputer.print_text_to_console(color + "[*]" +str(msg) + color_end)
+            
+    if output == 'json':
+        if isinstance(msg, type(Domain.Domain)):
+            out_domains.append(msg)
+        elif isinstance(msg, list):
+            out_domains=msg
+        else:
+            out_messages.append(msg)
+            if msg == "Done!":
+                outputer.print_json_to_console(out_messages, out_domains)
+
+
 
 
 def prepare_list_domains_based_on_input():
@@ -72,12 +99,12 @@ def prepare_list_domains_based_on_input():
     '''
     domains = []
     if remove or all_args:
-        print("\n\x1b[6;30;42m" + "[*]Letter removal" + '\x1b[0m')
+        print_out("Letter removal")
         step1 = RemoveOneLetter(url)
         domains = step1.remove_letters()
 
     if homoglyph_fast or all_args:
-        print("\x1b[6;30;42m[*] Fast Homoglyph attack" + '\x1b[0m')
+        print_out("Fast Homoglyph attack")
         step2 = HomoglyphAttack(url)
         step2.load_letters()
         domains = domains + step2.switch_letters()
@@ -85,18 +112,22 @@ def prepare_list_domains_based_on_input():
         #step2.switch_all_letters()
 
     if homoglyph_complete or all_args:
-        print("\x1b[6;30;42m[*] Complete Homoglyph attack (slow)" + '\x1b[0m')
+        print_out("Complete Homoglyph attack (slow)")
         step2 = HomoglyphAttack(url)
         step2.load_letters()
         domains = domains + step2.switch_all_letters()
 
     if flipper or all_args:
-        print("\x1b[6;30;42m[*] Flipper attack" + '\x1b[0m')
+        print_out("Flipper attack")
         step3 = Flipper(url)
         domains = domains + step3.flip_letters()
 
+    # Moved from modules, not sure if needed here
+    #if len(domain) < 4: 
+    #        print_out("With domains with less than 4 letters, this check is not accurate\n")
+
     if len(domains) == 0:
-        print("Exit: No domains have been generated!! Did you specify the attack(s)?")
+        print_out("Exit: No domains have been generated!! Did you specify the attack(s)?")
         exit(1)
         
     return domains
@@ -105,11 +136,11 @@ def prepare_list_domains_based_on_input():
 def check_required_params():
     global url
     if url is None:
-        print("--url field is mandatory")
+        print_out("--url field is mandatory")
         exit(0)
 
     if not checkvalidity.check_valid_url(url):
-        print("URL not valid. Exiting ...")
+        print_out("URL not valid. Exiting ...")
         exit(0)
 
 
@@ -128,34 +159,42 @@ def check_domain_availability(domains):
         try:
             for domain in domains:
                 complete_domain = domain + '.' + tld
-
+                result_domain = Domain.Domain()
                 if enable_godaddy == True:
-
                     response = godaddy.check_available_domain_get(complete_domain)
-                    #response = ''
                     if len(response) > 0:
                         response = json.loads(response)
                         if available:
                             if response['ExactMatchDomain']['IsPurchasable']:
-                                print('Domain ' + response['ExactMatchDomain']['Fqdn'] + ' is available: ' + str(
-                                    response['ExactMatchDomain']['IsPurchasable']) + " - Price: " + str(
-                                    response['Products'][0]['PriceInfo']['CurrentPrice']) + u"\xA3")
+                                result_domain.fqdn = str(response['ExactMatchDomain']['Fqdn'])
+                                result_domain.purchasable = str(response['ExactMatchDomain']['IsPurchasable'])
+                                result_domain.price = str(response['Products'][0]['PriceInfo']['CurrentPrice'])+ u"\xA3"
+                                result_domain.no_info = False
+                                print_out(result_domain)
 
                         else:
-                            print('Domain ' + response['ExactMatchDomain']['Fqdn'] + ' is available: ' + str(
-                                response['ExactMatchDomain']['IsPurchasable']))
+                            result_domain.fqdn = str(response['ExactMatchDomain']['Fqdn'])
+                            result_domain.purchasable = str(response['ExactMatchDomain']['IsPurchasable'])
+                            
+                            print_out(result_domain)
 
                     else:
-                        print('Domain ' + urllib.parse.unquote(complete_domain) + ' : No info retrieved, try manually ')
-                combined_domain_list.append(urllib.parse.unquote(complete_domain))
-
+                        result_domain.fqdn = urllib.parse.unquote(complete_domain);
+                        result_domain.no_info = True
+                result_domain.fqdn = urllib.parse.unquote(complete_domain);
+                combined_domain_list.append(result_domain)
         except Exception as e:
-            print(str(e) )
+            print_out(str(e))
             pass
 
-    if enable_godaddy == False:
-        print(combined_domain_list)
-
+    if enable_godaddy == False and len(combined_domain_list) > 0:
+        try:
+            print_out(combined_domain_list)
+        except Exception as e:
+            print(str(e))
+            pass
+            
+    print_out("Done!")
 
 def main():
     banner()
@@ -166,6 +205,7 @@ def main():
 
 
 if __name__ == "__main__":
-    args = url = tld = available = homoglyph_fast = enable_godaddy = flipper = remove = all_args = None
+    args = url = tld = available = homoglyph_fast = enable_godaddy = flipper = remove = all_args = output = None
+    out_messages = out_domains = []
     signal.signal(signal.SIGINT, signal_handler)
     main()
