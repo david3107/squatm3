@@ -32,11 +32,11 @@ These dependencies can be installed using the requirements file:
 
 - Installation on Windows:
 ```
-c:\python33\python.exe -m pip install -r requirements.txt
+c:\python33\python.exe -m pip install -r requirements.txt --user
 ```
-- Installation on Linux
+- Installation on Linux and MacOS
 ```
-pip install -r requirements.txt
+pip install -r requirements.txt --user
 ```
 
 ## Usage
@@ -52,9 +52,9 @@ pip install -r requirements.txt
 usage: squatme.py [-h] [--url URL] [--tld [TLD]] [-A [ALL]]
                   [-Hf [HOMOGLYPH_FAST]] [-Hc [HOMOGLYPH_COMPLETE]]
                   [-F [FLIPPER]] [-R [REMOVE]] [--godaddy [ENABLE_GODADDY]]
-                  [--only-available [AVAILABLE]]
+                  [--output [{text,json}]] [--only-available [AVAILABLE]]
 
-SquatMe v1.1 - @davide107
+SquatMe v1.2 - @davide107
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -72,6 +72,9 @@ optional arguments:
   --godaddy [ENABLE_GODADDY]
                         checks on godaddy if the domain is available for sale
                         together with the price
+  --output [{text,json}]
+                        Output of the tool: text (stdout), csv(file) or
+                        json(file)
   --only-available [AVAILABLE]
                         lists only the available domains for purchase
 ```
