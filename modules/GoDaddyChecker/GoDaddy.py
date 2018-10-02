@@ -1,11 +1,11 @@
 from tld import get_tld
-import json, requests
+import simplejson, requests
 import urllib
 
 
 class GoDaddy:
     def __init__(self):
-        self.data = json.load(open('configuration/godaddy.json'))
+        self.data = simplejson.load(open('configuration/godaddy.json'))
         self.key = self.data["key"]
         self.secret = self.data["secret"]
 
@@ -31,7 +31,7 @@ class GoDaddy:
 
         response = requests.post(url, headers=headers, json=payload)
         print(response.content)
-        results = json.loads(response.content.decode('utf-8'))
+        results = simplejson.loads(response.content.decode('utf-8'))
 
         return results
 
