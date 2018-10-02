@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 import simplejson
-class Domain:
-	def __init__(self):
-		self.fqdn = ""
-		self.purchasable = ""
-		self.price = ""
-		self.no_info = False
+class Result:
+	def __init__(self, messages, domains):
+		self.messages = messages
+		self.domains = domains
 
 	def _asdict(self):
 		return self.__dict__

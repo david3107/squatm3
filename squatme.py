@@ -168,14 +168,13 @@ def check_domain_availability(domains):
                             if response['ExactMatchDomain']['IsPurchasable']:
                                 result_domain.fqdn = str(response['ExactMatchDomain']['Fqdn'])
                                 result_domain.purchasable = str(response['ExactMatchDomain']['IsPurchasable'])
-                                result_domain.price = str(response['Products'][0]['PriceInfo']['CurrentPrice'])+ u"\xA3"
+                                result_domain.price = str(response['Products'][0]['PriceInfo']['CurrentPrice'])
                                 result_domain.no_info = False
                                 print_out(result_domain)
 
                         else:
                             result_domain.fqdn = str(response['ExactMatchDomain']['Fqdn'])
                             result_domain.purchasable = str(response['ExactMatchDomain']['IsPurchasable'])
-                            
                             print_out(result_domain)
 
                     else:
@@ -193,7 +192,7 @@ def check_domain_availability(domains):
         except Exception as e:
             print(str(e))
             pass
-            
+
     print_out("Done!")
 
 def main():
