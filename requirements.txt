@@ -3,3 +3,4 @@ validators
 decorator>=4.1.2
 requests
 simplejson
+homoglyphs

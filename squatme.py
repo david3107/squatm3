@@ -3,12 +3,15 @@ import argparse, json, signal, sys
 import urllib.parse
 from modules.GoDaddyChecker import GoDaddy
 from modules.Remover.RemoveOneLetter import RemoveOneLetter
+from modules.Remover.AddOneLetter import AddOneLetter
+from modules.Substitutions.HomoglyphAttack2 import HomoglyphAttack2
 from modules.Substitutions.HomoglyphAttack import HomoglyphAttack
 from modules.Substitutions.Flipper import Flipper
 from modules.Tldmodule.TldSelector import TldSelector
 from modules.Urlchecker import checkvalidity
 from modules.Output import outputer
 from modules.Classes import Domain
+import os
 
 
 def banner():
@@ -26,7 +29,7 @@ def signal_handler(sig, frame):
 
 
 def prepare_arguments():
-    global args, url, tld, available, homoglyph_fast,homoglyph_complete,enable_godaddy, flipper, remove, all_args, output, output_format
+    global args, url, tld, available, homoglyph_fast,homoglyph_complete,enable_godaddy, flipper, remove, add, all_args, output, output_format
 
     parser = argparse.ArgumentParser(description='SquatMe v1.1 -  @davide107')
     parser.add_argument('--url', dest='url', help='url to be squatted')
@@ -44,6 +47,8 @@ def prepare_arguments():
                         const=True, default=False, help='execute flipping attack ')
     parser.add_argument('-R', dest='remove', type=bool, nargs='?',
                         const=True, default=False, help='remove one letter a time')
+    parser.add_argument ('--add', dest='add', type=bool, nargs='?',
+                         const=True, default=False, help='add one letter a time')
     parser.add_argument('--godaddy', dest='enable_godaddy', type=bool, nargs='?',
                         const=True, default=False, help='checks on godaddy if the domain is available for sale together with the price')
     parser.add_argument('--output', dest='output', type=str, nargs='?',
@@ -61,6 +66,7 @@ def prepare_arguments():
     enable_godaddy = args.enable_godaddy
     flipper = args.flipper
     remove = args.remove
+    add = args.add
     output = args.output
     all_args = args.all
 
@@ -72,8 +78,11 @@ def print_out(msg):
         if isinstance(msg, Domain.Domain):
             if msg.no_info:
                 outputer.print_text_to_console(msg.fqdn + " - No info retrieved, try manually")
+            elif msg.price:
+                outputer.print_text_to_console (
+                    msg.fqdn + " is available - Price: " + msg.price)
             else:
-                outputer.print_text_to_console(msg.fqdn + " is available: " + msg.purchasable + " - Price: " + msg.price)
+                outputer.print_text_to_console(msg.fqdn + " is not available")
         elif isinstance(msg, list):
             for d in msg:
                 outputer.print_text_to_console(d.fqdn + " - No info retrieved, try manually")   
@@ -114,13 +123,22 @@ def prepare_list_domains_based_on_input():
     if homoglyph_complete or all_args:
         print_out("Complete Homoglyph attack (slow)")
         step2 = HomoglyphAttack(url)
+
+        #step2 = HomoglyphAttack2(url)
+
         step2.load_letters()
         domains = domains + step2.switch_all_letters()
+
 
     if flipper or all_args:
         print_out("Flipper attack")
         step3 = Flipper(url)
         domains = domains + step3.flip_letters()
+
+    if add or all_args:
+        print_out("Duplicate attack")
+        step4 =  AddOneLetter(url)
+        domains = domains + step4.add_one_letter()
 
     # Moved from modules, not sure if needed here
     #if len(domain) < 4: 
@@ -162,6 +180,7 @@ def check_domain_availability(domains):
                 result_domain = Domain.Domain()
                 if enable_godaddy == True:
                     response = godaddy.check_available_domain_get(complete_domain)
+                    os.system('sleep 0.9')
                     if len(response) > 0:
                         response = json.loads(response)
                         if available:
@@ -175,6 +194,7 @@ def check_domain_availability(domains):
                         else:
                             result_domain.fqdn = str(response['ExactMatchDomain']['Fqdn'])
                             result_domain.purchasable = str(response['ExactMatchDomain']['IsPurchasable'])
+                            result_domain.price = str (response['Products'][0]['PriceInfo']['CurrentPrice'])
                             print_out(result_domain)
 
                     else:
@@ -188,11 +208,11 @@ def check_domain_availability(domains):
 
     if enable_godaddy == False and len(combined_domain_list) > 0:
         try:
-            print_out(combined_domain_list)
+            print_out(list(set(combined_domain_list)))
         except Exception as e:
             print(str(e))
             pass
-
+    print_out("Total: " + str(len(list(set(combined_domain_list)))))
     print_out("Done!")
 
 def main():
@@ -204,7 +224,7 @@ def main():
 
 
 if __name__ == "__main__":
-    args = url = tld = available = homoglyph_fast = enable_godaddy = flipper = remove = all_args = output = None
+    args = url = tld = available = homoglyph_fast = enable_godaddy = flipper = remove = add = all_args = output = None
     out_messages = out_domains = []
     signal.signal(signal.SIGINT, signal_handler)
     main()

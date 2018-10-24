@@ -37,7 +37,7 @@ class GoDaddy:
 
     def check_available_domain_get(self, domain):
 
-        #headers = {'Authorization': 'sso-key ' + self.key + ':' + self.secret}
+
         url = 'https://uk.godaddy.com/domainsapi/v1/search/exact?q=' + domain
 
         headers = {
