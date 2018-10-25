@@ -1,9 +1,6 @@
 DB = {
     'homoglyph': 'db/homoglyph',
     'top_domains': 'db/top_domains',
-    'user': 'user',
-    'password': 'password',
-    'port': 3306
 }
 
 
