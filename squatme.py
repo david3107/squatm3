@@ -75,10 +75,12 @@ def print_out(msg):
     color = '\x1b[6;30;42m'
     color_end = '\x1b[0m'
     if output == 'text':
+
         if isinstance(msg, Domain.Domain):
+            print(msg.purchasable)
             if msg.no_info:
                 outputer.print_text_to_console(msg.fqdn + " - No info retrieved, try manually")
-            elif msg.price:
+            elif msg.purchasable:
                 outputer.print_text_to_console (
                     msg.fqdn + " is available - Price: " + msg.price)
             else:
