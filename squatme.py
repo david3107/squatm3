@@ -90,13 +90,21 @@ def print_out(msg):
             outputer.print_text_to_console(color + "[*]" +str(msg) + color_end)
             
     if output == 'json':
-        if isinstance(msg, type(Domain.Domain)):
+
+        
+        if isinstance(msg, Domain.Domain):
+            
             out_domains.append(msg)
+
         elif isinstance(msg, list):
+
+           
             out_domains=msg
         else:
+           
             out_messages.append(msg)
             if msg == "Done!":
+
                 outputer.print_json_to_console(out_messages, out_domains)
 
 
@@ -190,12 +198,14 @@ def check_domain_availability(domains):
                                 result_domain.price = str(response['Products'][0]['PriceInfo']['CurrentPrice'])
                                 result_domain.no_info = False
                                 print_out(result_domain)
+                                pass
 
                         else:
                             result_domain.fqdn = str(response['ExactMatchDomain']['Fqdn'])
                             result_domain.purchasable = str(response['ExactMatchDomain']['IsPurchasable'])
                             result_domain.price = str (response['Products'][0]['PriceInfo']['CurrentPrice'])
                             print_out(result_domain)
+                            pass
 
                     else:
                         result_domain.fqdn = urllib.parse.unquote(complete_domain);
@@ -225,6 +235,7 @@ def main():
 
 if __name__ == "__main__":
     args = url = tld = available = homoglyph_fast = enable_godaddy = flipper = remove = add = all_args = output = None
-    out_messages = out_domains = []
+    out_messages = []
+    out_domains = []
     signal.signal(signal.SIGINT, signal_handler)
     main()

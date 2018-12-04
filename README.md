@@ -11,12 +11,18 @@ Squatm3 is a python tool designed to enumerate available domains generated modif
 
 Squatm3 will help penetration testers to identify domains to be used in phishing attack simulations and security analysts to prevent effective phishing attacks
 
+Squatm3 comes in two flavors:
+
+-	command line tool 
+-  web solution (squatm3gator) that you can find (here)[]
+
 
 
 ## Installation
 
 ```
 git clone https://github.com/david3107/squatm3.git
+
 ```
 
 ## Recommended Python Version:
@@ -26,7 +32,19 @@ Squatm3 currently supports only **Python 3**
 
 ## Dependencies:
 
-Squatm3 depends on the `tld` , `validators` and the `decorator>=4.1.2` python modules.
+Squatm3 heavily depends on 
+
+``` 
+tld
+validators
+decorator>=4.1.2
+requests
+simplejson
+homoglyphs
+
+``` 
+
+python modules.
 
 These dependencies can be installed using the requirements file:
 
@@ -85,10 +103,10 @@ Squatm3 is licensed under the GNU GPL license.
 
 ## Troubleshooting
 
-If after the usage of the tool you do not get any results, it is possible that GoDaddy limited your IP. Workaround:
+It should not happen, but,  if after the usage of the tool you do not get any results, it is possible that GoDaddy limited your IP. Workaround:
 
--	use VPN
+- use VPN
 - wait till your IP is allowed again
 
 ## Version
-** Current version is 1.1 **
+** Current version is 1.2 **
