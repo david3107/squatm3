@@ -1,13 +1,13 @@
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 from tld import get_tld
 from configuration import config
 import codecs
 import urllib.parse
 import itertools
+import homoglyphs as hg
 
 
-
-class HomoglyphAttack:
+class HomoglyphAttack2:
     def __init__(self, url):
         self.url = url
         self.list_of_chars = []
@@ -23,9 +23,9 @@ class HomoglyphAttack:
                 key_value = line.split('\n')[0].split(',')
                 self.dictionary[key_value[0]] = key_value[1].split(' ')
 
-    
+
     def switch_letters(self):
-        
+
         '''
         The following function switches every single letter with a homoglyph
 
@@ -97,25 +97,20 @@ class HomoglyphAttack:
         The following function generates all the possible combinations using homoglyphs
 
         """
-        domains = []
         url = get_tld(self.url, as_object=True, fix_protocol=True)
         domain = url.domain
+        domains = hg.Homoglyphs().get_combinations(domain)
         a = []
-        j = 0
-        for letter in domain:
-            self.dictionary[letter].extend(letter)
-            a.append(self.dictionary[letter])
+        i = 0
+        print("Generated " + str(len(domains)) + " domains\n")
+        for domain in domains:
+            idna_domain = domain.encode('idna').decode('idna')
 
-        b = itertools.product(*a)
-
-        for i in b:
-            domains.append(urllib.parse.quote(''.join(i).encode('utf-8')))
-            j = j+1
-
-        # Remove the duplicates
-
-        return list(set(domains))
-
+            if not a.__contains__(idna_domain):
+                a.append(domain.encode('idna').decode('idna'))
+            i = i+1
+            print(str(i) + ' out of ' + str(len(domains)) + ' domains: ' + str(len(a)))
+        return a
 
 
 

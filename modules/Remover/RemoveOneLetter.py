@@ -10,11 +10,9 @@ class RemoveOneLetter:
         '''
             :return:
         '''
-
         url = get_tld(self.url, as_object=True, fix_protocol=True)
         domain = url.domain
-        if len(domain) < 4:
-            print("With domains with less than 4 letters, this check is not accurate\n")
+
         new_urls_without_letter = []
         n = 0
         m = len(domain)
