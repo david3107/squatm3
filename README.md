@@ -54,7 +54,7 @@ c:\python33\python.exe -m pip install -r requirements.txt --user
 ```
 - Installation on Linux and MacOS
 ```
-pip install -r requirements.txt --user
+pip3 install -r requirements.txt --user
 ```
 
 ## Usage
