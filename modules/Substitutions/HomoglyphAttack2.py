@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from tld import get_tld
+from configuration import config
 import codecs
 import urllib.parse
 import itertools
@@ -11,18 +12,16 @@ class HomoglyphAttack2:
         self.url = url
         self.list_of_chars = []
         self.dictionary = {}
+        self.db_path = config.DB['homoglyph']
 
     def load_letters(self):
         '''
             :return:
         '''
-        with codecs.open('db/homoglyph', 'rU', encoding='utf8') as f:
+        with codecs.open(self.db_path, 'rU', encoding='utf8') as f:
             for line in f:
                 key_value = line.split('\n')[0].split(',')
                 self.dictionary[key_value[0]] = key_value[1].split(' ')
-
-
-
 
 
     def switch_letters(self):

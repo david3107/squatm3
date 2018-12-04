@@ -53,7 +53,7 @@ def prepare_arguments():
                         const=True, default=False, help='checks on godaddy if the domain is available for sale together with the price')
     parser.add_argument('--output', dest='output', type=str, nargs='?',
                         const=True, default="text", choices=['text', 'json'], 
-                        help='Output of the tool: text (stdout), csv(file) or json(file)')
+                        help='Output of the tool: text or json')
     parser.add_argument('--only-available', dest='available', type=bool, nargs='?',
                         const=True, default=False,
                         help='lists only the available domains for purchase')
