@@ -72,7 +72,7 @@ usage: squatme.py [-h] [--url URL] [--tld [TLD]] [-A [ALL]]
                   [-F [FLIPPER]] [-R [REMOVE]] [--godaddy [ENABLE_GODADDY]]
                   [--output [{text,json}]] [--only-available [AVAILABLE]]
 
-SquatMe v1.2 - @davide107
+SquatMe v1.5 - @davide107
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -101,12 +101,8 @@ optional arguments:
 
 Squatm3 is licensed under the GNU GPL license.
 
-## Troubleshooting
 
-It should not happen, but,  if after the usage of the tool you do not get any results, it is possible that GoDaddy limited your IP. Workaround:
-
-- use VPN
-- wait till your IP is allowed again
 
 ## Version
-** Current version is 1.2 **
+
+Current version is 1.5

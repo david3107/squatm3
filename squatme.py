@@ -31,7 +31,7 @@ def signal_handler(sig, frame):
 def prepare_arguments():
     global args, url, tld, available, homoglyph_fast,homoglyph_complete,enable_godaddy, flipper, remove, add, all_args, output, output_format
 
-    parser = argparse.ArgumentParser(description='SquatMe v1.1 -  @davide107')
+    parser = argparse.ArgumentParser(description='SquatMe v1.5 -  @davide107')
     parser.add_argument('--url', dest='url', help='url to be squatted')
     parser.add_argument('--tld', dest='tld', type=bool, nargs='?',
                         const=True, default=True,
