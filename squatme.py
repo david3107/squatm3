@@ -77,7 +77,7 @@ def print_out(msg):
     if output == 'text':
 
         if isinstance(msg, Domain.Domain):
-            print(msg.purchasable)
+            
             if msg.no_info:
                 outputer.print_text_to_console(msg.fqdn + " - No info retrieved, try manually")
             elif msg.purchasable:

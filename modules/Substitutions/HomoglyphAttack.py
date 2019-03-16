@@ -102,19 +102,41 @@ class HomoglyphAttack:
         domain = url.domain
         a = []
         j = 0
-        for letter in domain:
-            self.dictionary[letter].extend(letter)
-            a.append(self.dictionary[letter])
+        glyphs = self.dictionary
+        result1 = set()
 
-        b = itertools.product(*a)
+        for ws in range(1, len(domain)):
+            for i in range(0, (len(domain)-ws)+1):
+                win = domain[i:i+ws]
+                j = 0
+                while j < ws:
+                    c = win[j]
+                    if c in glyphs:
+                        win_copy = win
+                        for g in glyphs[c]:
+                            win = win.replace(c, g)
+                            result1.add(domain[:i] + win + domain[i+ws:])
+                            win = win_copy
+                    j += 1
 
-        for i in b:
-            domains.append(urllib.parse.quote(''.join(i).encode('utf-8')))
-            j = j+1
+        result2 = set()
 
-        # Remove the duplicates
+        for domain in result1:
+            for ws in range(1, len(domain)):
+                for i in range(0, (len(domain)-ws)+1):
+                    win = domain[i:i+ws]
+                    j = 0
+                    while j < ws:
+                        c = win[j]
+                        if c in glyphs:
+                            win_copy = win
+                            for g in glyphs[c]:
+                                win = win.replace(c, g)
+                                result2.add(domain[:i] + win + domain[i+ws:])
+                                win = win_copy
+                        j += 1
 
-        return list(set(domains))
+        return list(result1 | result2)
 
 
 
