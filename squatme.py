@@ -11,6 +11,7 @@ from modules.Tldmodule.TldSelector import TldSelector
 from modules.Urlchecker import checkvalidity
 from modules.Output import outputer
 from modules.Classes import Domain
+from modules.Whoiser import Whoiser
 import os
 
 
@@ -77,19 +78,25 @@ def print_out(msg):
     if output == 'text':
 
         if isinstance(msg, Domain.Domain):
-            
+            cr_date = 'n/a'
+            exp_date = 'n/a'
+            if msg.creation_date is not None:
+                cr_date = msg.creation_date
+            if msg.expiration_date is not None:
+                exp_date = msg.expiration_date
             if msg.no_info:
                 outputer.print_text_to_console(msg.fqdn + " - No info retrieved, try manually")
             elif msg.purchasable:
                 outputer.print_text_to_console (
-                    msg.fqdn + " is available - Price: " + msg.price)
+                    msg.fqdn + " is available - Price: " + msg.price + ", Registration date: " + cr_date + ", Expiration date: " + exp_date)
             else:
                 outputer.print_text_to_console(msg.fqdn + " is not available")
         elif isinstance(msg, list):
             for d in msg:
                 outputer.print_text_to_console(d.fqdn + " - No info retrieved, try manually")   
         else:
-            outputer.print_text_to_console(color + "[*]" +str(msg) + color_end)
+            if len(msg) < 50:
+                outputer.print_text_to_console(color + "[*]" +str(msg) + color_end)
             
     if output == 'json':
 
@@ -181,6 +188,7 @@ def check_domain_availability(domains):
         tlds = tld_list.generate_domains_from_top_tld
 
     godaddy = GoDaddy.GoDaddy()
+    w = Whoiser.Whoiser()
     combined_domain_list = []
 
     for tld in tlds:
@@ -188,8 +196,14 @@ def check_domain_availability(domains):
             for domain in domains:
                 complete_domain = domain + '.' + tld
                 result_domain = Domain.Domain()
+                w.get_info(complete_domain)
+                result_domain.creation_date = w.creation_date
+                result_domain.expiration_date = w.expiration_date
                 if enable_godaddy == True:
                     response = godaddy.check_available_domain_get(complete_domain)
+                    w.get_info(complete_domain)
+                    result_domain.creation_date = w.creation_date
+                    result_domain.expiration_date = w.expiration_date
                     os.system('sleep 0.9')
                     if len(response) > 0:
                         response = json.loads(response)
