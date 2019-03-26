@@ -4,7 +4,7 @@ from modules.Classes import  Result
 
 def print_text_to_console(msg):
 
-	print(msg)
+	print(msg,flush=True)
 
 
 def print_json_to_console(messages, domains):
